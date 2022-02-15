@@ -21,9 +21,9 @@ wag =
     { earth: s $ (map <<< map) triangleSynth
         $ map (changeVolume (const 0.4))
         $ b twobits
-            [ i [twobits]
+            [ i twobits [ twobits ]
             , flatten twobits
-            , x twobits [reverse twobits]
+            , x twobits [ reverse twobits ]
             ]
 
     , wind: s $ map (changeVolume (const 0.5))
