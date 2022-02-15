@@ -6,13 +6,7 @@ import Next from "../components/next";
 import openingSalvo from "../Docs/Tidal/MiniNotation/OpeningSalvo.purs";
 import { main as openingSalvoMain } from "../../output/Docs.Tidal.MiniNotation.OpeningSalvo/";
 
-The `s` function turns mini-notation into a `Cycle` on its happy path to becoming music.
-
-In this section, we'll focus on the `Cycle` type specifically, learning how to construct one programatically and what instances it has.
-
-## The parse function
-
-Cycles turn into cycles using the `parse` function. As `s` is a highly-overloaded function it also accepts cycles. So the two syntaxes (syntaxi?) below are equivalent.
+Cycles are containers of notes and rests. Let's see what sorts of neat things operations you can perform on cycles.
 
 ## Instances
 

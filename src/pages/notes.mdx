@@ -3,13 +3,65 @@
 import { Player } from "../components/player";
 import Footer from "../components/footer";
 import Next from "../components/next";
-import openingSalvo from "../Docs/Tidal/MiniNotation/OpeningSalvo.purs";
-import { main as openingSalvoMain } from "../../output/Docs.Tidal.MiniNotation.OpeningSalvo/";
+import usingParse from "../Docs/Tidal/Notes/UsingParse.purs";
+import { main as usingParseMain } from "../../output/Docs.Tidal.Notes.UsingParse/";
 
-When you use `parse` to create a `Cycle`, the full type is `Cycle (Maybe (Note event))`. We've already learned what `Cycle` is, so let's work downwards into the type.
+The `s` function turns mini-notation into a structure called a _cycle_ on its happy path to becoming music.
 
-- `Maybe` represents the presence or the absence of a note. In a note's absence, it is a rest, or `~`.
-- `Note` is a single chunk of musical time. It is often populated by a sample, although it can also be populated by synths, as we'll see later on this page.
+In this section, we'll focus on how to manipulate the notes inside of cycles, before turning to working with whole cycles.
+
+## The parse function
+
+Mini-notation is turned into cycles using the `parse` function. As `s` is a highly-overloaded function it also accepts cycles. So the two syntaxes (syntaxi?) below are equivalent.
+
+<Player player={usingParseMain} code={usingParse} />
+
+When you use `parse` to create a `Cycle`, the full type is `Cycle (Maybe (Note event))`.
+
+ Let's work our way from the inside of the type to the outside:
+
 - `event` is an incoming event from the external environment. For the most common cases this will be `Unit` (aka nothing at all), but it can be any incoming event from a browser like a click or a MIDI event.
+- `Note` is a single chunk of musical time. It is often populated by a sample, although it can also be populated by synths, as we'll see later on this page.
+- `Maybe` represents the presence or the absence of a note. In a note's absence, it is a rest, or `~`.
+- `Cycle` is a container of sequences, chords, and/or branches, as we saw in the [section on mini-notation](../mini-notation).
 
-<Next next ={"../notes"} title={"Notes"} />
+## The anatomy of a note
+
+The definition of `Note` can be found in [`WAGS.Lib.Tidal.Types`](https://github.com/mikesol/purescript-wags-lib/blob/main/src/WAGS/Lib/Tidal/Types.purs). With aliases resolved, it is:
+
+```haskell
+newtype Note event = Note
+  { sampleFoT :: Either (UnsampledTimeIs event -> Sample) Sample
+  , forwardFoT :: BFoT event
+  , tumultFoT :: TimeIs event -> Tumultuous D1 "output" (voice :: Unit)
+  , rateFoT :: FoT event
+  , bufferOffsetFoT :: FoT event
+  , volumeFoT :: FoT event
+  }
+```
+
+## Modifying notes
+
+Notes can be modified in terms of their sample, the offset of the sample's buffer, whether the sample is played forwards or backwards, the playback rate, the volume and the effects chain.
+
+In all of the examples below, we'll be using the `Functor` instance of `Cycle`, which allows us to map over the cycle.
+
+### Changing the sample
+
+### Changing the buffer offset
+
+### Changing the playback direction
+
+### Changing the playback rate
+
+### Changing the volume
+
+### Changing the effects chain
+
+## Tagging notes
+
+## Cycles
+
+If operations on notes allow us to produce fine-grained effects, operations on cycles allow us to construct (and deconstruct!) novel forms. Let's see how in the next section
+
+<Next next ={"../cycles"} title={"Cycles"} />
