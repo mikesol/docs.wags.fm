@@ -4,36 +4,26 @@ import Prelude
 
 import WAGS.Lib.Learn (Player, player)
 import WAGS.Lib.Tidal (tdl)
-import WAGS.Lib.Tidal.Cycle (reverse)
+import WAGS.Lib.Tidal.Cycle (flatten, reverse)
 import WAGS.Lib.Tidal.Synth (triangleSynth)
 import WAGS.Lib.Tidal.Tidal
   (b, changeVolume, i, make, parse, s, x)
 import WAGS.Lib.Tidal.Types (AFuture)
 
 p = parse
-twobits o0 o1 o2 o3 o4 o5 = o0
-  ( o1 (p "c5")
-      [ o2 (p "g4") [ p "g4" ]
-      , p "aflat4"
-      , p "g4"
-      ]
-  )
-  [ o3 (p "~")
-      [ o4 (p "d4") [ p "f4", p "g4", p "b4" ]
-      , o5 (p "c4") [ p "e4", p "g4", p "c5" ]
-      , (p "~")
-      ]
-  ]
+twobits =
+  parse """c5 g4*2 aflat4 g4
+   ~ [d4,f4,g4,b4] [c4,e4,g4,c5] ~"""
 
 wag :: AFuture
 wag =
   make 4.0
     { earth: s $ (map <<< map) triangleSynth
         $ map (changeVolume (const 0.4))
-        $ b (twobits i i i i x x)
-            [ twobits i x i x i x
-            , twobits x i x i x i
-            , reverse $ twobits i i i i x x
+        $ b twobits
+            [ i twobits [twobits, twobits]
+            , flatten twobits
+            , x twobits [reverse twobits]
             ]
 
     , wind: s $ map (changeVolume (const 0.5))
