@@ -5,6 +5,8 @@ import Footer from "../components/footer";
 import Next from "../components/next";
 import usingParse from "../Docs/Tidal/Notes/UsingParse.purs";
 import { main as usingParseMain } from "../../output/Docs.Tidal.Notes.UsingParse/";
+import playbackRate from "../Docs/Tidal/Notes/PlaybackRate.purs";
+import { main as playbackRateMain } from "../../output/Docs.Tidal.Notes.PlaybackRate/";
 
 The `s` function turns mini-notation into a structure called a _cycle_ on its happy path to becoming music.
 
@@ -25,38 +27,129 @@ When you use `parse` to create a `Cycle`, the full type is `Cycle (Maybe (Note e
 - `Maybe` represents the presence or the absence of a note. In a note's absence, it is a rest, or `~`.
 - `Cycle` is a container of sequences, chords, and/or branches, as we saw in the [section on mini-notation](../mini-notation).
 
-## The anatomy of a note
+## The anatomy of a Note
 
 The definition of `Note` can be found in [`WAGS.Lib.Tidal.Types`](https://github.com/mikesol/purescript-wags-lib/blob/main/src/WAGS/Lib/Tidal/Types.purs). With aliases resolved, it is:
 
 ```haskell
 newtype Note event = Note
   { sampleFoT :: Either (UnsampledTimeIs event -> Sample) Sample
-  , forwardFoT :: BFoT event
-  , tumultFoT :: TimeIs event -> Tumultuous D1 "output" (voice :: Unit)
-  , rateFoT :: FoT event
-  , bufferOffsetFoT :: FoT event
-  , volumeFoT :: FoT event
+  , forwardFoT :: TimeIs event -> Boolean
+  , tumultFoT ::
+      TimeIs event -> Tumultuous D1 "output" (voice :: Unit)
+  , rateFoT :: TimeIs event -> Number
+  , bufferOffsetFoT :: TimeIs event -> Number
+  , volumeFoT :: TimeIs event -> Number
   }
 ```
 
-## Modifying notes
+Notes can be modified in terms of:
 
-Notes can be modified in terms of their sample, the offset of the sample's buffer, whether the sample is played forwards or backwards, the playback rate, the volume and the effects chain.
+- their sample via `sampleFoT`
+- the offset of the sample's buffer via `bufferOffsetFoT`
+- whether the sample is played forwards or backwards via `forwardFoT`
+- the playback rate of the sample via `rateFoT`
+- the volume via `volumeFoT`
+- the effects chain via `tumultFoT`
 
-In all of the examples below, we'll be using the `Functor` instance of `Cycle`, which allows us to map over the cycle.
+The only other type of import before we start hacking away is `TimeIs event`.
 
-### Changing the sample
+```haskell
+newtype TimeIs event = TimeIs
+  { event :: { isFresh :: Boolean, value :: event }
+  , externalControl :: ExternalControl
+  , headroomInSeconds :: Number
+  , clockTime :: Number
+  , sampleTime :: Number
+  , bigCycleTime :: Number
+  , littleCycleTime :: Number
+  , normalizedClockTime :: Number
+  , normalizedSampleTime :: Number
+  , normalizedBigCycleTime :: Number
+  , normalizedLittleCycleTime :: Number
+  , littleCycleDuration :: Number
+  , bigCycleDuration :: Number
+  , bufferDuration :: Number
+  , entropy :: Number
+  , initialEntropy :: Number
+  }
+```
+
+The fields correspond to the following:
+
+- `event` - The previous incoming event, and wheter it just happened or not.
+- `externalControl` - A vector of 1000 floats that can be mapped to any external control parameter, like sliders or knobs. If you have more than 1000 sliders or knobs in your interface, you should probably simplify your interface.
+- `headroomInSeconds` - How many seconds of projected headroom until the next render cycle. Only used in advanced cases.
+- `clockTime` - Number of seconds since playback started.
+- `sampleTime` - Number of seconds since _this_ sample started playing.
+- `bigCycleTime` - Number of seconds that the cycle takes _including_ branches. In a cycle that lasts 2.0 seconds with 3 branches, this number would go between 0.0 and 6.0.
+- `littleCycleTime` - Number of seconds that the cycle takes _excluding_ branches. In a cycle that lasts 2.0 seconds with 3 branches, this number would go between 0.0 and 2.0.
+- `normalizedClockTime` - `clockTime` normalized between 0.0 (when playback starts) and 1.0 (the end of time immortal). Rounded to the nearest floating point number.
+- `normalizedSampleTime` - `sampleTime` normalized between 0.0 (when a sample starts) and 1.0 (when it ends).
+- `normalizedBigCycleTime` - `bigCycleTime` normalized between 0.0 and 1.0.
+- `normalizedLittleCycleTime` - `littleCycleTime` normalized between 0.0 and 1.0.
+- `bigCycleDuration` - Number of seconds that the cycle takes _including_ branches. In a cycle that lasts 2.0 seconds with 3 branches, this number would be 6.0.
+- `littleCycleDuration` - Number of seconds that the cycle takes _excluding_ branches. In a cycle that lasts 2.0 seconds with 3 branches, this number would be 2.0.
+- `bufferDuration` - The duration of the sample in seconds.
+- `entropy` - A random float between 0 and 1 that changes _every_ time the rendering loop is called, which is around 60fps.
+- `initialEntropy` - A random float that is generated _once_ at the start of a sample and held.
+
+The newtype `UnsampledTimeIs event` is just like its cousin `TimeIs` but without any information about the sample, meaning it lacks `sampleTime`, `normalizedSampleTime` and `bufferDuration`.
+
+In all of the examples below, we'll be using the `Functor` and `Traversable` instances of `Cycle`, which allow us to map/traverse over the cycle and drill down to each `Note`.
+
+### Numeric functions of time
+
+There are lots of ways to change volume and rate, but the two classics we'll see time and time again are lfos and piecewise functions.
+
+#### lfo
+
+The `WAGS.Lib.Learn.Oscillator` package comes with two LFO functions `lfo`, which creates an LFO using a sine wave, and `lfo'`, which uses any periodic function from `Number -> Number`. Both return a function of time from `Number -> Number`.
+
+```haskell
+lfo'
+  :: (Number -> Number)
+  -> { freq :: Number, amp :: Number, phase :: Number }
+  -> Number
+  -> Number
+
+lfo
+  :: { freq :: Number, amp :: Number, phase :: Number }
+  -> Number
+  -> Number
+```
+
+#### Piecewise function
+
+The `simplePiecewise` function creates a piecewise function for a group of breakpoints.
+
+```haskell
+simplePiecewise
+  :: Array (Number /\ Number) -> Number -> Number
+```
+
+Note that the piecewise function does _not_ loop - to do that, you should use the `%` (remainder) operator from the `Math` package.
+
+```haskell
+simplePiecewise [0.0 /\ 0.0, 1.0 /\ 1.0] 1.0
+  == simplePiecewise [0.0 /\ 0.0, 1.0 /\ 1.0] (3.0 % 1.0)
+```
+
+### Changing the playback rate
+
+Let's change the playback rate of two samples. We'll use a shorter syntax via `changeRate` and a longer one using traversals and lenses, which are equivalent. I recommend using the shorter syntax, as it is easier to read more resilient to version changes.
+
+<Player player={playbackRateMain} code={playbackRate} />
+
+### Changing the volume
 
 ### Changing the buffer offset
 
 ### Changing the playback direction
 
-### Changing the playback rate
-
-### Changing the volume
-
 ### Changing the effects chain
+
+### Changing the sample
 
 ## Tagging notes
 
