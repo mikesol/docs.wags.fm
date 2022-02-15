@@ -5,6 +5,7 @@ import Prelude
 import Type.Proxy (Proxy(..))
 import WAGS.Lib.Learn (Player, player)
 import WAGS.Lib.Tidal (tdl)
+import WAGS.Lib.Tidal.Cycle (reverse)
 import WAGS.Lib.Tidal.Synth (triangleSynth)
 import WAGS.Lib.Tidal.Tidal (b, changeVolume, i, make, parse, s, x)
 import WAGS.Lib.Tidal.Types (AFuture)
@@ -31,8 +32,8 @@ wag =
         $ map (changeVolume (const 0.4))
         $ b (twobits i i i i x x)
             [ twobits i x i x i x
-            , twobits i x i x i i
             , twobits x i x i x i
+            , reverse $ twobits i i i i x x
             ]
 
     , wind: s $ map (changeVolume (const 0.5))
