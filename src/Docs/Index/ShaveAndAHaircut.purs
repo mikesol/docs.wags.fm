@@ -2,7 +2,6 @@ module Docs.Index.ShaveAndAHaircut where
 
 import Prelude
 
-import Type.Proxy (Proxy(..))
 import WAGS.Lib.Learn (Player, player)
 import WAGS.Lib.Tidal (tdl)
 import WAGS.Lib.Tidal.Cycle (reverse)
