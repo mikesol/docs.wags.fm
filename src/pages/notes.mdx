@@ -11,6 +11,8 @@ import volume from "../Docs/Tidal/Notes/Volume.purs";
 import { main as volumeMain } from "../../output/Docs.Tidal.Notes.Volume/";
 import bufferOffset from "../Docs/Tidal/Notes/BufferOffset.purs";
 import { main as bufferOffsetMain } from "../../output/Docs.Tidal.Notes.BufferOffset/";
+import forward from "../Docs/Tidal/Notes/Forward.purs";
+import { main as forwardMain } from "../../output/Docs.Tidal.Notes.Forward/";
 
 The `s` function turns mini-notation into a structure called a _cycle_ on its happy path to becoming music.
 
@@ -176,6 +178,10 @@ Let's change the buffer offset in the same fashion, using the shorter `changeBuf
 <Player player={bufferOffsetMain} code={bufferOffset} />
 
 ### Changing the playback direction
+
+Let's change the buffer playback direction in the same fashion, using the shorter `changeForward` and its equivalent expansion.
+
+<Player player={bufferOffsetMain} code={bufferOffset} />
 
 ### Changing the effects chain
 
