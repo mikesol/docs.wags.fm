@@ -1,4 +1,4 @@
-module Docs.Tidal.Notes.PlaybackRate where
+module Docs.Tidal.Notes.Volume where
 
 import Prelude
 
@@ -13,21 +13,21 @@ import WAGS.Lib.Learn (Player, player)
 import WAGS.Lib.Learn.Oscillator (lfo)
 import WAGS.Lib.Piecewise (simplePiecewise)
 import WAGS.Lib.Tidal (tdl)
-import WAGS.Lib.Tidal.Tidal (changeRate, make, parse, s)
+import WAGS.Lib.Tidal.Tidal (changeVolume, make, parse, s)
 import WAGS.Lib.Tidal.Types (AFuture, Note(..))
 
 wag :: AFuture
 wag = make 2.0
   { earth: s
       $ map
-          ( changeRate
+          ( changeVolume
               ( _.clockTime
                   >>> lfo
                     { phase: 0.0
                     , amp: 0.3
-                    , freq: 1.2
+                    , freq: 8.2
                     }
-                  >>> add 1.0
+                  >>> add 0.2
               )
           )
       $ parse "baa:0"
@@ -35,13 +35,13 @@ wag = make 2.0
       $ set
           ( traversed <<< traversed
               <<< unto Note
-              <<< prop (Proxy :: _ "rateFoT")
+              <<< prop (Proxy :: _ "volumeFoT")
           )
           ( lcmap unwrap
               ( _.sampleTime >>>
                   simplePiecewise
-                    [ 0.0 /\ 1.2
-                    , 1.2 /\ 0.3
+                    [ 0.0 /\ 1.0
+                    , 1.2 /\ 0.1
                     ]
               )
           )

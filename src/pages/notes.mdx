@@ -7,6 +7,10 @@ import usingParse from "../Docs/Tidal/Notes/UsingParse.purs";
 import { main as usingParseMain } from "../../output/Docs.Tidal.Notes.UsingParse/";
 import playbackRate from "../Docs/Tidal/Notes/PlaybackRate.purs";
 import { main as playbackRateMain } from "../../output/Docs.Tidal.Notes.PlaybackRate/";
+import volume from "../Docs/Tidal/Notes/Volume.purs";
+import { main as volumeMain } from "../../output/Docs.Tidal.Notes.Volume/";
+import bufferOffset from "../Docs/Tidal/Notes/BufferOffset.purs";
+import { main as bufferOffsetMain } from "../../output/Docs.Tidal.Notes.BufferOffset/";
 
 The `s` function turns mini-notation into a structure called a _cycle_ on its happy path to becoming music.
 
@@ -102,7 +106,7 @@ In all of the examples below, we'll be using the `Functor` and `Traversable` ins
 
 There are lots of ways to change volume and rate, but the two classics we'll see time and time again are lfos and piecewise functions.
 
-#### lfo
+#### LFO
 
 The `WAGS.Lib.Learn.Oscillator` package comes with two LFO functions `lfo`, which creates an LFO using a sine wave, and `lfo'`, which uses any periodic function from `Number -> Number`. Both return a function of time from `Number -> Number`.
 
@@ -119,7 +123,7 @@ lfo
   -> Number
 ```
 
-#### Piecewise function
+#### Piecewise functions
 
 The `simplePiecewise` function creates a piecewise function for a group of breakpoints.
 
@@ -135,15 +139,41 @@ simplePiecewise [0.0 /\ 0.0, 1.0 /\ 1.0] 1.0
   == simplePiecewise [0.0 /\ 0.0, 1.0 /\ 1.0] (3.0 % 1.0)
 ```
 
+Of course, nothing stops one from doing the old <b>LFO-Piecewise-combo</b>!
+
+```haskell
+lfo'
+  ((_ % 1.0) >>> 
+    simplePiecewise
+      [ 0.0 /\ 0.0
+      , 0.1 /\ 1.0
+      , 0.3 /\ 0.1
+      , 1.0 /\ 0.0]
+  )
+  { freq: 2.0, amp: 0.5, phase: 0.5 }
+```
+
+(drops the 🎤)
+
 ### Changing the playback rate
 
 Let's change the playback rate of two samples. We'll use a shorter syntax via `changeRate` and a longer one using traversals and lenses, which are equivalent. I recommend using the shorter syntax, as it is easier to read more resilient to version changes.
 
 <Player player={playbackRateMain} code={playbackRate} />
 
+No 🐑 were harmed in the making of that snippet.
+
 ### Changing the volume
 
+Let's modulate the volume in the same fashion, using the shorter `changeVolume` and its equivalent expansion.
+
+<Player player={volumeMain} code={volume} />
+
 ### Changing the buffer offset
+
+Let's change the buffer offset in the same fashion, using the shorter `changeBufferOffset` and its equivalent expansion. As a reminder, the buffer offset indicates how many seconds into the sample the buffer starts playback.
+
+<Player player={bufferOffsetMain} code={bufferOffset} />
 
 ### Changing the playback direction
 
