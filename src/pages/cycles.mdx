@@ -1,0 +1,47 @@
+# Cycles
+
+import { Player } from "../components/player";
+import Footer from "../components/footer";
+import Next from "../components/next";
+import openingSalvo from "../Docs/Tidal/MiniNotation/OpeningSalvo.purs";
+import { main as openingSalvoMain } from "../../output/Docs.Tidal.MiniNotation.OpeningSalvo/";
+
+The `s` function turns mini-notation into a `Cycle` on its happy path to becoming music.
+
+In this section, we'll focus on the `Cycle` type specifically, learning how to construct one programatically and what instances it has.
+
+## The parse function
+
+Cycles turn into cycles using the `parse` function. As `s` is a highly-overloaded function it also accepts cycles. So the two syntaxes (syntaxi?) below are equivalent.
+
+## Instances
+
+`Cycle` comes fully-loaded with instances of some useful typeclasses. The most useful ones are indicated below.
+
+### Functor
+
+### Apply
+
+### Applicative
+
+### Monad
+
+### Traversable
+
+## Utility functions
+
+There are also several utility functions one can use to manipualte a cycle.
+
+### reverse
+
+### flatten
+
+## Cycle constructors
+
+In addition to parse, which turns a string into a cycle of notes, you can construct cycles using one of three utility functions.
+
+## Notes
+
+On the inside of cycles there are `Note`-s. In the next section, we'll learn how to apply transformations to notes.
+
+<Next next ={"../notes"} title={"Notes"} />

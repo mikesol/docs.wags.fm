@@ -5,6 +5,20 @@ import Footer from "../components/footer";
 import Next from "../components/next";
 import openingSalvo from "../Docs/Tidal/MiniNotation/OpeningSalvo.purs";
 import { main as openingSalvoMain } from "../../output/Docs.Tidal.MiniNotation.OpeningSalvo/";
+import cancan from "../Docs/Tidal/MiniNotation/Cancan.purs";
+import { main as cancanMain } from "../../output/Docs.Tidal.MiniNotation.Cancan/";
+import square from "../Docs/Tidal/MiniNotation/Square.purs";
+import { main as squareMain } from "../../output/Docs.Tidal.MiniNotation.Square/";
+import subdiv from "../Docs/Tidal/MiniNotation/Subdiv.purs";
+import { main as subdivMain } from "../../output/Docs.Tidal.MiniNotation.Subdiv/";
+import chords from "../Docs/Tidal/MiniNotation/Chords.purs";
+import { main as chordsMain } from "../../output/Docs.Tidal.MiniNotation.Chords/";
+import poly from "../Docs/Tidal/MiniNotation/Poly.purs";
+import { main as polyMain } from "../../output/Docs.Tidal.MiniNotation.Poly/";
+import ltgt from "../Docs/Tidal/MiniNotation/LtGt.purs";
+import { main as ltgtMain } from "../../output/Docs.Tidal.MiniNotation.LtGt/";
+import branches from "../Docs/Tidal/MiniNotation/Branches.purs";
+import { main as branchesMain } from "../../output/Docs.Tidal.MiniNotation.Branches/";
 
 Mini-notation is a brand of notation invented by the fine folks at Tidal Cycles. Inspired by the work of Bernard Bell, it condenses pattern-based music into a very small vocabulary.  The `wags` mini-notation is less complete than the [Tidal cycles mini-notation](https://tidalcycles.org/docs/reference/mini_notation/), but it has the essential elements to get you started.
 
@@ -14,4 +28,52 @@ As an opening salvo, here's some mini-notation.
 
 By the end of this page, you'll be creating mini-notation like a highly-skilled amateur!
 
-<Next next ={"../s"} title={"The many types of s"} />
+## Notes and rests
+
+The simplest form of mini-notation is a series of notes and rests.
+
+<Player player={cancanMain} code={cancan} />
+
+Rests are represented by a `~`. As we saw in the [section on the `make` function](../make), notes can be either from the [SuperDirt library](https://github.com/musikinformatik/SuperDirt) or imported using the `sounds` object.
+
+## Square brackets
+
+As we saw in the canned example above, each unit (in this case samples and rests) its own equal chunk of the cycle. As the cycle is 1.8 seconds long and there are 16 units, each unit takes 0.1125 seconds.
+
+What if we want to subdivide a unit? That's what square brackets are for! In the example below, there are eight (8) units, of which three are subdivided.
+
+<Player player={squareMain} code={square} />
+
+You can create as many subdivisions as you'd like and put as many elements in them as you'd like. In ProTools, doing quintuplets followed by triplets like this is un-fun. But in wags and other text-based languages, it's a breeze!
+
+<Player player={subdivMain} code={subdiv} />
+
+## Commas
+
+Commas allow us to create simultaneous musical events within a unit. This includes square brackets and, if we're at the top-level, the top-level unit.
+
+When we're talking about single events, that means chords.
+
+<Player player={chordsMain} code={chords} />
+
+Those friends of yours that were impressed with five-then-three will have their minds 🤯 with five-on-three using commas!
+
+<Player player={polyMain} code={poly} />
+
+## Less than / greater than
+
+Less-than and greater-than signs create branches. When the cycle loops back, it takes a new branch.
+
+<Player player={ltgtMain} code={ltgt} />
+
+If there are multiple branches, the product is taken. For example, if there is a branch of two `AB` and a branch of two `XY`, then there will be four unique loops — `AX`, `AY`, `BX`, and `BY`.
+
+<Player player={branchesMain} code={branches} />
+
+> For those of you coming from tidal cycles, `<` and `>` behaves similarly in simple cases but differently when there are multiple branches. The wags version may be modified to behave the same as in tidal.
+
+## Cycles
+
+Mini-notation, when parsed, turns into a PureScript data structure called a `Cycle`. To create algorithmic and pattern-based music, its often useful to work directly with `Cycle`-s instead of working with `String`-s. Let's see how that's done!
+
+<Next next ={"../cycles"} title={"Cycles"} />

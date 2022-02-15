@@ -1,0 +1,15 @@
+# Notes
+
+import { Player } from "../components/player";
+import Footer from "../components/footer";
+import Next from "../components/next";
+import openingSalvo from "../Docs/Tidal/MiniNotation/OpeningSalvo.purs";
+import { main as openingSalvoMain } from "../../output/Docs.Tidal.MiniNotation.OpeningSalvo/";
+
+When you use `parse` to create a `Cycle`, the full type is `Cycle (Maybe (Note event))`. We've already learned what `Cycle` is, so let's work downwards into the type.
+
+- `Maybe` represents the presence or the absence of a note. In a note's absence, it is a rest, or `~`.
+- `Note` is a single chunk of musical time. It is often populated by a sample, although it can also be populated by synths, as we'll see later on this page.
+- `event` is an incoming event from the external environment. For the most common cases this will be `Unit` (aka nothing at all), but it can be any incoming event from a browser like a click or a MIDI event.
+
+<Next next ={"../notes"} title={"Notes"} />
