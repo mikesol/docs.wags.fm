@@ -1,3 +1,3 @@
-# Soundly functional
+# docs.wags.fm
 
-A blog hosted [here](https://mikesol.github.io/sf).
+[Documentation for `purescript-wags`](https://docs.wags.fm).
