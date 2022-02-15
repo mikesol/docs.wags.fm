@@ -1,0 +1,94 @@
+# The make function
+
+import { Player } from "../components/player";
+import Footer from "../components/footer";
+import Next from "../components/next";
+import hello from "../Docs/Tidal/Hello.purs";
+import { main as helloMain } from "../../output/Docs.Tidal.Hello/";
+import duration from "../Docs/Tidal/MakeAndS/Duration.purs";
+import { main as durationMain } from "../../output/Docs.Tidal.MakeAndS.Duration/";
+import ewflhr from "../Docs/Tidal/MakeAndS/EWFLHR.purs";
+import { main as ewflhrMain } from "../../output/Docs.Tidal.MakeAndS.EWFLHR/";
+import drones from "../Docs/Tidal/MakeAndS/Drones.purs";
+import { main as dronesMain } from "../../output/Docs.Tidal.MakeAndS.Drones/";
+import sounds from "../Docs/Tidal/MakeAndS/Sounds.purs";
+import { main as soundsMain } from "../../output/Docs.Tidal.MakeAndS.Sounds/";
+import preload from "../Docs/Tidal/MakeAndS/Preload.purs";
+import { main as preloadMain } from "../../output/Docs.Tidal.MakeAndS.Preload/";
+import title from "../Docs/Tidal/MakeAndS/Title.purs";
+import { main as titleMain } from "../../output/Docs.Tidal.MakeAndS.Title/";
+
+The bread-and-butter function when working with the wags tidal DSL is `make`. You use it to construct something of type `AFuture`. A type is an assertion to the compiler saying "I'm confident I know what this thing is, and if I'm wrong, yell at me."
+
+Try getting yelled at! Change `AFuture` to `String` or `Number` and see what happens.
+
+<Player player={helloMain} code={hello} />
+
+The name `make` is admittedly pretty lame. Something like `s0und` or `let'sDO_THIS` or even `tidal` would have been more interesting. But I was super tired when I named it, and then I put it all over the internet, and now changing it would take too much time. This is sadly how most programming conventions and paradigms are created.
+
+Anyway, let's unpack what `make` actually does do.
+
+## What does make do?
+
+`make` is the toplevel thing you'll want to use to make `AFuture`. On [yap.wags.fm](https://yap.wags.fm), the site expects all futures will be called `wag`. That's the case here as well.
+
+The first argument to `make` is a duration in seconds. Making it shorter will make a cycle faster. Making it longer will make a cycle slower. If you try to set this to `0.0` or a negative number (naughty you) it will be adjusted to something sensible.
+
+<Player player={durationMain} code={duration} />
+
+The second argument to `make` is a record with eleven (11) parameters that fall into three (3) categories: <b>voices</b>, <b>drones</b>, and <b>other</b>.
+
+## Voices
+
+`make` has six voice slots called [`earth`, `wind`, `fire`](https://www.youtube.com/watch?v=Gs069dndIYk), [`lambert`, `hendricks`, and `ross`](https://youtu.be/aNPHp0RBWYY?t=100). You can fill some, all, or none with music.
+
+<Player player={ewflhrMain} code={ewflhr} />
+
+We'll get into what the tilde `~` and what the square brackets `[]` mean in the next section. For now, the important bit to note is that there are six different events spread over the six voices and each one starts with the function `s`.
+
+`s` is a highly overloaded function that can transform nearly anything into a voice. If you don't use `s` at the beginning of a voice, you'll get an error.
+
+## Drones
+
+There are two drone slots, called [`water` and `heart`](https://www.youtube.com/watch?v=OiYjTb3opAA), that can be used to create drones.
+
+<Player player={dronesMain} code={drones} />
+
+Like the voices, drones loop, but unlike the voices, they are not beholden to the cycle duration. They loop whenever the sample is done.
+
+## Other
+
+There are three fields in the "other" category - `sounds`, `preload` and `title`.
+
+### Sounds
+
+`sounds` are key/value pairs of names of sounds that you'll use in your session and their corresponding URL. The type is `Object BufferURL`, and while there are a few ways to create one of these, the easiest is by using `fromHomogeneous` and `hmap BufferUrl`. You can copy and paste that snippet below and use it wherever you need to use sounds.
+
+All of the sounds from the [SuperDirt library](https://github.com/musikinformatik/SuperDirt), which is what we have used thus far, come pre-loaded.
+
+<Player player={soundsMain} code={sounds} />
+
+Like the voices, drones loop, but unlike the voices, they are not beholden to the cycle duration. They loop whenever the sample is done.
+
+### Preload
+
+There are some exceptional circumstances where you'll need to specify which sounds to preload, meaning that the rendering engine isn't smart enough to download them before playing. This is an advanced feature, so keep it in your pocket till you need it!
+
+`preload` takes a term of type `Array Sample`. Don't worry about the heavy syntax - it's just to force the feature to be used used. If you delete the `preload` line, you won't hear anything except the kick drum. This is because the all the sounds except the kick drum are chosen at random, so the engine doesn't know which ones to load.
+
+<Player player={preloadMain} code={preload} />
+
+### Title
+
+Every wag deserves a title! The `title` parameter has no bearing on the actual musical output, but it feels nice writing one!
+
+<Player player={titleMain} code={title} />
+
+
+## Summing up
+
+So that's it! Go forth and be brilliant!
+
+What am I talking about, that's totally not it. There's a ton of stuff you still have to learn. Onwards and upwards!
+
+<Next next ={"../mini-notation"} title={"Mini-notatoin"} />

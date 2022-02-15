@@ -1,0 +1,25 @@
+# Hello Tidal
+
+import { Player } from "../components/player";
+import Footer from "../components/footer";
+import Next from "../components/next";
+import hello from "../Docs/Tidal/Hello.purs";
+import { main as helloMain } from "../../output/Docs.Tidal.Hello/";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlayCircle, faStopCircle } from "@fortawesome/free-solid-svg-icons";
+
+A minimal viable wags project using the tidal-inspired input format will look something like this.
+
+<Player player={helloMain} code={hello} />
+
+You can edit the code in the editor below or get social by copying it into a pad on [yap.wags.fm](https://yap.wags.fm).
+
+Press <FontAwesomeIcon icon={faStopCircle} />, try changing `alphabet:0` to `hh:3`, `glitch:2`, or and of [these sounds](https://github.com/mikesol/wagsi/blob/main/SOUNDS.md) then press <FontAwesomeIcon icon={faPlayCircle} /> again and hear what happens!
+
+If you're not used to working with PureScript, fear not! The [PureScript home page](https://purescript.org) has lots of resources on how to get started with the language.
+
+If you've never coded before, my recommendation is to learn the way I did — copy and paste stuff, tweak parameters, and see what happens!
+
+The good news is that every example on this site is editable, and every example is copy-and-paste-able into `yap.wags.fm` and playable as-is. So you have no excuse for not making amazingly audacious things! Unless your excuse is "I'm intrinsically incapable of making amazingly audacious things." But that statement is pretty audacious, so you have no excuse. Keep reading!
+
+<Next next ={"../make"} title={"The make function"} />
