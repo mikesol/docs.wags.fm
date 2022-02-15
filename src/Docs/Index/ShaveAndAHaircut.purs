@@ -6,7 +6,8 @@ import WAGS.Lib.Learn (Player, player)
 import WAGS.Lib.Tidal (tdl)
 import WAGS.Lib.Tidal.Cycle (reverse)
 import WAGS.Lib.Tidal.Synth (triangleSynth)
-import WAGS.Lib.Tidal.Tidal (b, changeVolume, i, make, parse, s, x)
+import WAGS.Lib.Tidal.Tidal
+  (b, changeVolume, i, make, parse, s, x)
 import WAGS.Lib.Tidal.Types (AFuture)
 
 p = parse
