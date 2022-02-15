@@ -12,8 +12,7 @@ import WAGS.Lib.Tidal.Types (AFuture)
 
 p = parse
 twobits =
-  parse """c5 g4*2 aflat4 g4
-   ~ [d4,f4,g4,b4] [c4,e4,g4,c5] ~"""
+  parse "c5 g4*2 aflat4 g4 ~ [d4,f4,g4,b4] [c4,e4,g4,c5] ~"
 
 wag :: AFuture
 wag =
