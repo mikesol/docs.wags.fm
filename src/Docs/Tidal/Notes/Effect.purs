@@ -16,7 +16,8 @@ import WAGS.Lib.Learn.Oscillator (lfo)
 import WAGS.Lib.Piecewise (simplePiecewise)
 import WAGS.Lib.Tidal (tdl)
 import WAGS.Lib.Tidal.FX (fx, hello, goodbye)
-import WAGS.Lib.Tidal.Tidal (changeEffect, make, parse, s)
+import WAGS.Lib.Tidal.Tidal
+  (changeEffect, make, parse, s)
 import WAGS.Lib.Tidal.Types (AFuture, Note(..))
 
 wag :: AFuture
