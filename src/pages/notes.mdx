@@ -13,6 +13,8 @@ import bufferOffset from "../Docs/Tidal/Notes/BufferOffset.purs";
 import { main as bufferOffsetMain } from "../../output/Docs.Tidal.Notes.BufferOffset/";
 import forward from "../Docs/Tidal/Notes/Forward.purs";
 import { main as forwardMain } from "../../output/Docs.Tidal.Notes.Forward/";
+import effect from "../Docs/Tidal/Notes/Effect.purs";
+import { main as effectMain } from "../../output/Docs.Tidal.Notes.Effect/";
 
 The `s` function turns mini-notation into a structure called a _cycle_ on its happy path to becoming music.
 
@@ -145,7 +147,7 @@ Of course, nothing stops one from doing the old <b>LFO-Piecewise-combo</b>!
 
 ```haskell
 lfo'
-  ((_ % 1.0) >>> 
+  ((_ % 1.0) >>>
     simplePiecewise
       [ 0.0 /\ 0.0
       , 0.1 /\ 1.0
@@ -184,6 +186,10 @@ Let's change the buffer playback direction in the same fashion, using the shorte
 <Player player={forwardMain} code={forward} />
 
 ### Changing the effects chain
+
+Effects chains are an advanced feature of wags and there will be [a whole section devoted to them](../fx) later in the documentation. That said, as they're part of the notes API, we'll visit briefly how to add one, using the shorter `changeEffect` and its equivalent expansion.
+
+<Player player={effectMain} code={effect} />
 
 ### Changing the sample
 
