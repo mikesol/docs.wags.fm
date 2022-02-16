@@ -19,6 +19,8 @@ import ltgt from "../Docs/Tidal/MiniNotation/LtGt.purs";
 import { main as ltgtMain } from "../../output/Docs.Tidal.MiniNotation.LtGt/";
 import branches from "../Docs/Tidal/MiniNotation/Branches.purs";
 import { main as branchesMain } from "../../output/Docs.Tidal.MiniNotation.Branches/";
+import symbol from "../Docs/Tidal/MiniNotation/Symbol.purs";
+import { main as symbolMain } from "../../output/Docs.Tidal.MiniNotation.Symbol/";
 
 Mini-notation is a brand of notation invented by the fine folks at Tidal Cycles. Inspired by the work of Bernard Bell, it condenses pattern-based music into a very small vocabulary.  The `wags` mini-notation is less complete than the [Tidal cycles mini-notation](https://tidalcycles.org/docs/reference/mini_notation/), but it has the essential elements to get you started.
 
@@ -73,6 +75,12 @@ If there are multiple branches, the product is taken. For example, if there is a
 > For those of you coming from tidal cycles, `<` and `>` behaves similarly in simple cases but differently when there are multiple branches. The wags version may be modified to behave the same as in tidal.
 
 ## Proxies vs strings
+
+So far, we have used `String`-s to write mini-notation. For one-off bits of notation this is fine, but for iterative back-and-forth with a server (ie on [yap.wags.fm](https://yap.wags.fm)), it's often preferable to use a term of type `Proxy Symbol`. To the naked eye, this looks like a `Proxy` followed by a `String`, but the `String` in question is actually a symbol that's read by the _compiler_ and not the JavaScript runtime.
+
+Because `Symbol`-s can be parsed by the compiler and will fail to compile if they contain malformed mini-notation. A compile-time error means the previous music will continue unabated, whereas a runtime error means the music will cut out entirely. So, for live coding or DJ-ing, use `Proxy Symbol`-s!
+
+<Player player={symbolMain} code={symbol} />
 
 ## Notes
 
