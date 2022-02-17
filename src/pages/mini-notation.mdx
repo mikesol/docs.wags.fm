@@ -2,7 +2,7 @@
 
 import { Player } from "../components/player";
 import Footer from "../components/footer";
-import Next from "../components/next";
+import Nav from "../components/nav";
 import openingSalvo from "../Docs/Tidal/MiniNotation/OpeningSalvo.purs";
 import { main as openingSalvoMain } from "../../output/Docs.Tidal.MiniNotation.OpeningSalvo/";
 import cancan from "../Docs/Tidal/MiniNotation/Cancan.purs";
@@ -86,4 +86,4 @@ Because `Symbol`-s can be parsed by the compiler and will fail to compile if the
 
 Mini-notation, when parsed, turns into a PureScript data structure with the type `Cycle (Maybe (Note event))`. To create algorithmic and pattern-based music, its often useful to work directly with `Note`-s and `Cycle`-s instead of working with `String`-s. Let's start with `Notes`.
 
-<Next next ={"../notes"} title={"Notes"} />
+<Nav next ={"../notes"} nextT={"Notes"} prev ={"../make"} prevT={"The make function"} />

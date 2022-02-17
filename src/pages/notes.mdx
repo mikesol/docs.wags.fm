@@ -2,7 +2,7 @@
 
 import { Player } from "../components/player";
 import Footer from "../components/footer";
-import Next from "../components/next";
+import Nav from "../components/nav";
 import usingParse from "../Docs/Tidal/Notes/UsingParse.purs";
 import { main as usingParseMain } from "../../output/Docs.Tidal.Notes.UsingParse/";
 import playbackRate from "../Docs/Tidal/Notes/PlaybackRate.purs";
@@ -15,6 +15,12 @@ import forward from "../Docs/Tidal/Notes/Forward.purs";
 import { main as forwardMain } from "../../output/Docs.Tidal.Notes.Forward/";
 import effect from "../Docs/Tidal/Notes/Effect.purs";
 import { main as effectMain } from "../../output/Docs.Tidal.Notes.Effect/";
+import sample from "../Docs/Tidal/Notes/Sample.purs";
+import { main as sampleMain } from "../../output/Docs.Tidal.Notes.Sample/";
+import synth from "../Docs/Tidal/Notes/Synth.purs";
+import { main as synthMain } from "../../output/Docs.Tidal.Notes.Synth/";
+import tag from "../Docs/Tidal/Notes/Tag.purs";
+import { main as tagMain } from "../../output/Docs.Tidal.Notes.Tag/";
 
 The `s` function turns mini-notation into a structure called a _cycle_ on its happy path to becoming music.
 
@@ -193,12 +199,26 @@ Effects chains are an advanced feature of wags and there will be [a whole sectio
 
 ### Changing the sample
 
+Changing the sample only makes sense if there is something that makes it impossible to specify when creating a cycle, ie entropy. We'll use `changeSampleF` and its equivalent expansion.
+
+<Player player={sampleMain} code={sample} />
+
 ## Synthetic notes
 
+It's possible to create synthetic notes using arbitrary effect chains. Here we define a simple synthesizer and a more complex one with a full expansion. In the more complex example, we use `makePiecewise` to make an ADSR envelope.
+
+`makePiecewise` returns an `AudioParameter` instead of a `Number`, so if you're working with `Number`-s, make sure to convert them to `AudioParameter`-s using `pure` before trying to combine them with another audio parameter (i.e. `myParam * pure 5.0` instead of `myParam * 5.0`).
+
+<Player player={synthMain} code={synth} />
+
 ## Tagging notes
+
+Instead of using map to apply a change to every note, we can tag individual notes or groups of notes and only apply the changes to the tags. Multiple notes can have the same tag to create novel groupings.
+
+<Player player={tagMain} code={tag} />
 
 ## Cycles
 
 If operations on notes allow us to produce fine-grained effects, operations on cycles allow us to construct (and deconstruct!) novel forms. Let's see how in the next section
 
-<Next next ={"../cycles"} title={"Cycles"} />
+<Nav next ={"../cycles"} nextT={"Cycles"} prev ={"../mini-notation"} prevT={"Mini-notation"} />
