@@ -34,8 +34,20 @@ There are also several utility functions one can use to manipualte a cycle.
 
 In addition to parse, which turns a string into a cycle of notes, you can construct cycles using one of three utility functions.
 
-## Notes
+## Tidal compat
 
-On the inside of cycles there are `Note`-s. In the next section, we'll learn how to apply transformations to notes.
+`purescript-wags-lib` has a tida compat library, `WAGS.Lib.Tidal.Compat`, that aims to have API parity with the tidal cycles API. While the names of types and the typelcass overloading is different, the basic functionality is the same.  Here are examples of some functions from that API.
+
+### every
+
+### fast
+
+### fastGap
+
+### slow
+
+## Sequences
+
+Working with cycles is useful for pattern-based music, but sometimes, we want an interface that's more like a DAW, where we work with sequences and sections of music. The next section will cover that.
 
 <Nav prev ={"../notes"} prevT={"Notes"} next ={"../sequences"} nextT={"Sequences"} />

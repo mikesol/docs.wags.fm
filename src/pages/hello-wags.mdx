@@ -1,0 +1,23 @@
+# Hello Wags
+
+import { Player } from "../components/player";
+import Footer from "../components/footer";
+import Nav from "../components/nav";
+
+Wags is a PureScript library for working with music and sound in the browser. This [documentation](../) starts by introducing wags through the [tidal API](../hello-tidal), a front-end for wags that helps write pattern-based music using a syntax similar to that of [Tidal Cycles](https://tidalcycles.org).
+
+This part of the documentation dives into wags's low-level API. In addition to powering the tidal frontend, this API allows for the creation of [rich, interactive and performant browser-based musical applications and works](https://whatis.wags.fm), including integrations with  animation libraries like `purescript-painting`, `d3` and `three.js`. Like this instrument!
+
+Here are some considerations to take into account when deciding between wags and its tidal front end. If the answer is yes, you probably want to use wags:
+
+- Do I need to customize the interactivity of my web app?
+- Does my web app use MIDI?
+- Does my web app need to integrate into a JS framework like `reveal.js` or `React`?
+- Am I going to use animations?
+- Am I pulling in data to power my app from API calls or from an ML framework like `tensorflow.js`?
+- Will I need fine-grained control over performance?
+- Will my application use more than 1,000 web audio nodes at any single time?
+
+The next section will look at the anatomy of a wags application, starting from the construction of a graph and going all the way up to embedding wags in an HTML document.
+
+<Nav next ={"../make"} nextT={"The make function"} />
